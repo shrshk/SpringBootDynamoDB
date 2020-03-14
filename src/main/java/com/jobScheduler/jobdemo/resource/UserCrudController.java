@@ -64,6 +64,9 @@ public class UserCrudController {
     @RequestMapping(value = "/users/{userId}", produces = {"application/json"}, method = RequestMethod.DELETE)
     public ResponseEntity deleteUser(@PathVariable String userId) {
         try {
+        	User user = userCrudService.readUser(userId);
+        	if (user == null)
+        		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("user with" + userId + "not found");
             userCrudService.deleteUser(userId);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         } catch (AmazonServiceException e) {
